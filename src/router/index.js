@@ -46,12 +46,12 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
+    redirect: 'dashboard',
     children: [{
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: '主面板', icon: 'dashboard' }
     }]
   },
 
@@ -59,6 +59,7 @@ export const constantRoutes = [
     path: '/example',
     component: Layout,
     redirect: '/example/table',
+    hidden: true,
     name: 'Example',
     meta: { title: 'Example', icon: 'example' },
     children: [
@@ -80,6 +81,7 @@ export const constantRoutes = [
   {
     path: '/form',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: 'index',
@@ -94,6 +96,7 @@ export const constantRoutes = [
     path: '/nested',
     component: Layout,
     redirect: '/nested/menu1',
+    hidden: true,
     name: 'Nested',
     meta: {
       title: 'Nested',
@@ -151,14 +154,25 @@ export const constantRoutes = [
   {
     path: 'external-link',
     component: Layout,
+    hidden: true,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
+        path: 'https://www.baidu.com',
         meta: { title: 'External Link', icon: 'link' }
       }
     ]
   },
-
+  {
+    path: '/company',
+    component: Layout,
+    children: [
+      {
+        path: 'list',
+        component: () => import('@/views/nested/menu2/index'),
+        meta: { title: '合作公司列表', icon: 'form' }
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

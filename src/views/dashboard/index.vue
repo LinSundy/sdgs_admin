@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">欢迎登录本系统: <span class="dashboard-special">{{ name }}</span>。</div>
   </div>
 </template>
 
@@ -25,6 +25,9 @@ export default {
   &-text {
     font-size: 30px;
     line-height: 46px;
+  }
+  &-special {
+    color: darkred;
   }
 }
 </style>
