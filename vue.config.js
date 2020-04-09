@@ -36,6 +36,12 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    proxy: {
+      '/dev-api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true
+      }
+    },
     before: require('./mock/mock-server.js')
   },
   configureWebpack: {

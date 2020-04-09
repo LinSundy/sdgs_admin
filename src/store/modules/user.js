@@ -1,6 +1,9 @@
-import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+// import { login, logout, getInfo } from '@/api/user'
+// import { getToken, setToken, removeToken } from '@/utils/auth'
+import { logout, getInfo } from '@/api/user'
+import { getToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
+import service from '@/utils/request'
 
 const getDefaultState = () => {
   return {
@@ -30,17 +33,27 @@ const mutations = {
 const actions = {
   // user login
   login({ commit }, userInfo) {
-    const { username, password } = userInfo
-    return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
-        const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
-      }).catch(error => {
-        reject(error)
-      })
+    // const { username, password } = userInfo
+    console.log(userInfo, 'user')
+    service({
+      baseURL: '',
+      url: '/dev-api/login/',
+      method: 'post',
+      data: userInfo
+    }).then(res => {
+      console.log(res, 'res')
     })
+    return '111'
+    // return new Promise((resolve, reject) => {
+    //   login({ username: username.trim(), password: password }).then(response => {
+    //     const { data } = response
+    //     commit('SET_TOKEN', data.token)
+    //     setToken(data.token)
+    //     resolve()
+    //   }).catch(error => {
+    //     reject(error)
+    //   })
+    // })
   },
 
   // get user info
