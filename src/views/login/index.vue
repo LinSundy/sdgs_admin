@@ -59,13 +59,6 @@ import md5 from 'md5'
 export default {
   name: 'Login',
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!validUsername(value)) {
-    //     callback(new Error('Please enter the correct user name'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('密码不能小于6位哦~'))
@@ -111,7 +104,7 @@ export default {
         if (valid) {
           this.loading = true
           const data = {
-            username: this.loginForm.username,
+            username: this.loginForm.username.trim(),
             password: md5(this.loginForm.password)
           }
           this.$store.dispatch('user/login', data).then(() => {
