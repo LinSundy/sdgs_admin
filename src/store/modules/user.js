@@ -1,9 +1,9 @@
 // import { login, logout, getInfo } from '@/api/user'
 // import { getToken, setToken, removeToken } from '@/utils/auth'
-import { logout, getInfo } from '@/api/user'
+import { login, logout, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-import service from '@/utils/request'
+// import service from '@/utils/request'
 
 const getDefaultState = () => {
   return {
@@ -34,13 +34,8 @@ const actions = {
   // user login
   login({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
-      service({
-        baseURL: '',
-        url: '/dev-api/login/',
-        method: 'post',
-        data: userInfo
-      }).then(response => {
-        const { data } = response
+      login(userInfo).then(res => {
+        const { data } = res
         commit('SET_TOKEN', data.token)
         setToken(data.token)
         resolve()
@@ -53,8 +48,8 @@ const actions = {
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const { data } = response
+      getInfo(state.token).then(res => {
+        const { data } = res
 
         if (!data) {
           reject('Verification failed, please Login again.')
