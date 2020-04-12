@@ -168,7 +168,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'list',
-        component: () => import('@/views/nested/menu2/index'),
+        component: () => import('@/views/company/index'),
         meta: { title: '合作公司列表', icon: 'form' }
       }
     ]

@@ -65,7 +65,6 @@ service.interceptors.response.use(
             location.reload()
           })
         }).catch(() => {
-          console.log('取消');
           store.dispatch('user/resetToken').then(() => {
             location.reload()
           })
