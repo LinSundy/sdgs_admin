@@ -43,10 +43,10 @@
 
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
-      <div class="tips">
-        <span style="margin-right:20px;">用户名: admin</span>
-        <span> 密码: 任意字符</span>
-      </div>
+<!--      <div class="tips">-->
+<!--        <span style="margin-right:20px;">用户名: admin</span>-->
+<!--        <span> 密码: 任意字符</span>-->
+<!--      </div>-->
 
     </el-form>
   </div>
@@ -59,13 +59,6 @@ import md5 from 'md5'
 export default {
   name: 'Login',
   data() {
-    const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        callback(new Error('密码不能小于6位哦~'))
-      } else {
-        callback()
-      }
-    }
     return {
       loginForm: {
         username: 'admin',
@@ -73,7 +66,7 @@ export default {
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        password: [{ required: true, trigger: 'blur', validator: this.validatePassword }]
       },
       loading: false,
       passwordType: 'password',
@@ -89,6 +82,13 @@ export default {
     }
   },
   methods: {
+    validatePassword(rule, value, callback) {
+      if (value.length < 6) {
+        callback(new Error('密码不能小于6位哦~'))
+      } else {
+        callback()
+      }
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -107,8 +107,10 @@ export default {
             username: this.loginForm.username.trim(),
             password: md5(this.loginForm.password)
           }
-          this.$store.dispatch('user/login', data).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
+          this.$store.dispatch('user/login', data).then((res) => {
+            if (res.data) {
+              this.$router.push({ path: this.redirect || '/' })
+            }
             this.loading = false
           }).catch(() => {
             this.loading = false
