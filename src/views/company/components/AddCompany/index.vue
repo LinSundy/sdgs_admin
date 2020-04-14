@@ -93,7 +93,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="cancel">取 消</el-button>
-      <el-button type="primary" @click="editCompany">确 定</el-button>
+      <el-button type="primary" @click="addCompany">确 定</el-button>
     </div>
     <RecordForm :recordFormVisible="recordFormVisible"
                 @editData="editData"
@@ -142,7 +142,7 @@
     }
   ]
   export default {
-    name: 'CompanyForm',
+    name: 'AddCompany',
     components: {
       RecordForm
     },
@@ -154,68 +154,48 @@
     data() {
       return {
         INDUSTRY_TYPE,
-        dialogTableVisible: false,
-        dialogFormVisible: true,
         recordFormVisible: false,
         form: {
-          id: this.company_obj.id,
-          name: this.company_obj.name || '', // 公司名称
-          info: this.company_obj.info || '', // 简介
-          industry_type: this.company_obj.industry_type || 9, // 行业类别
-          contacts: this.company_obj.contacts || '', // 联系方式一
-          contacts1: this.company_obj.contacts1 || '', // 联系方式二
-          register_capital: this.company_obj.register_capital || '', // 注册资本
-          contact_person: this.company_obj.contact_person || '', // 联系人
-          url: this.company_obj.url || '', // 公司网址
-          level: this.company_obj.level || '', // 评级
-          recent_situation: this.company_obj.recent_situation || '', // 近况
-          records: this.company_obj.records || [] // 合作项目
+          name: '', // 公司名称
+          info: '', // 简介
+          industry_type: 1, // 行业类别
+          contacts: '', // 联系方式一
+          contacts1: '', // 联系方式二
+          register_capital: '', // 注册资本
+          contact_person: '', // 联系人
+          url: '', // 公司网址
+          level: 1, // 评级
+          recent_situation: '', // 近况
+          records: [] // 合作项目
         },
         formLabelWidth: '100px',
         obj: null // 合作记录的弹出窗口
       }
     },
     methods: {
-      editCompany() {
-        api.editCompany({data: this.form}).then(() => {
+      addCompany() {
+        api.addOneCompany({data: this.form}).then(res => {
           this.$emit('reGetdata')
-          this.$emit('update:companyFormVisible', false)
+          this.cancel()
         })
       },
-      removeItemRecordsById(id) {
-        if(this.form.records && this.form.records.length == 0) return
-        for (let i = 0, l = this.form.records.length; i < l; i++) {
-          let record = this.form.records[i];
-          if(record.id === id) {
-            this.form.records.splice(i, 1)
-            break
-          }
-        }
-      },
       editData(val) {
-        for (let i = 0, l = this.form.records.length; i < l; i++) {
-          let record = this.form.records[i];
-          if(record.id === val.id) {
-            record.content = val.content
-            break
-          }
-        }
+        this.form.records[val.index].content = val.content
       },
       editRow(index, row) {
         this.obj = {
+          index: index,
           record_id: row.id,
           title: '编辑合作项目',
-          status: false, // 代表编辑
           type: 2,
+          status: true,
           initContent: row.content || ''
         }
         this.recordFormVisible = true
       },
-      deleteRow(index, row) {
-        const {id} = row
-        api.delRecord(id).then(() => {
-          this.removeItemRecordsById(id)
-        })
+      deleteRow(index) {
+        if(this.form.records && this.form.records.length == 0) return
+        this.form.records.splice(index, 1)
       },
       updateRecord(val) {
         this.form.records.push(val)
@@ -224,14 +204,14 @@
         this.obj = {
           company_id: this.form.id,
           title: '新增合作项目',
-          status: false, // false 表示编辑
+          status: true, // false 表示编辑 true表示新增
           type: 1,
           initContent: ''
         }
         this.recordFormVisible = true
       },
       cancel() {
-        this.$emit('update:companyFormVisible', false)
+        this.$emit('update:addCompanyFormVisible', false)
       }
     }
   }
