@@ -112,6 +112,7 @@
     },
     methods: {
       page_handle(pageNum) {
+        console.log(pageNum, '计算')
         this.pagination.pageNum = pageNum
         this.getData()
       },
@@ -198,11 +199,15 @@
         }
       },
       getData() {
-        api.getCompanyList(this.pagination).then(res => {
+        api.getCompanyList(this.pagination, {data: {search_value: ''}}).then(res => {
           this.loading = false
           this.companies = res.data.companies
           this.pagination.pageNum = res.data.paginate.page
           this.pagination.total = res.data.paginate.total
+          if(this.pagination.total < this.pagination.pageNum) {
+            this.pagination.pageNum = this.pagination.total
+            this.getData()
+          }
         }).catch(() => {
           this.loading = false
         })

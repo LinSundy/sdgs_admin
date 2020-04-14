@@ -12,11 +12,15 @@ export function addCompany(data) {
   })
 }
 
-export function getCompanyList(params) {
+export function getCompanyList(params, data) {
   return request({
+    headers: {
+      'Content-Type': 'application/json'
+    },
     url: '/companies/',
-    method: 'get',
-    params
+    method: 'post',
+    params,
+    data
   })
 }
 
