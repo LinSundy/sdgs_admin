@@ -104,7 +104,7 @@
         search: '',
         company_obj: null,
         pagination: {
-          pageSize: 1,
+          pageSize: 5,
           pageNum: 1,
           total: 0
         }
@@ -112,12 +112,12 @@
     },
     methods: {
       page_handle(pageNum) {
-        console.log(pageNum, '计算')
         this.pagination.pageNum = pageNum
         this.getData()
       },
       searchHandle() {
-        console.log(this.search, 'sea')
+        this.pagination.pageNum = 1
+        this.getData()
       },
       addCompanySubmitHandle(val) {
         this.form.records.push(val)
@@ -154,7 +154,7 @@
         if (val && typeof val === 'string') {
           return val.trim().replace(/[\r\n]/g, '')
         }
-        return val
+        return String(val)
       },
       change_event(e) {
         this.parse_loading = this.$loading({
@@ -173,6 +173,7 @@
           const wk_sheet = wb.Sheets[wb.SheetNames[0]]
           const sheet_json = XLSX.utils.sheet_to_json(wk_sheet)
           sheet_json.forEach(cell => {
+            console.log(that.format_value(cell['联系方式']), '妞')
             const _data = {
               name: that.format_value(cell['单位名称']),
               industry_type: that.format_value(cell['行业类别']),
@@ -180,10 +181,11 @@
               register_capital: that.format_value(cell['注册资本']),
               records: that.format_value(cell['已合作项目']),
               contact_person: that.format_value(cell['联系人']),
-              contacts: that.format_value(cell['联系方式']),
+              contacts: that.format_value(cell['联系方式']).split(',')[0] || '',
+              contacts1: that.format_value(cell['联系方式']).split(',')[1] || '',
               recent_situation: that.format_value(cell['近三年业绩情况']),
               url: that.format_value(cell['公司网址']),
-              level: that.format_value(cell['评级']),
+              level: cell['评级'] || 1,
               credentials: that.format_value(cell['资质情况'])
             }
             that.addCompanyList.push(_data)
@@ -199,15 +201,12 @@
         }
       },
       getData() {
-        api.getCompanyList(this.pagination, {data: {search_value: ''}}).then(res => {
+        this.loading = true
+        api.getCompanyList(this.pagination, {data: {search_value: this.search}}).then(res => {
           this.loading = false
           this.companies = res.data.companies
           this.pagination.pageNum = res.data.paginate.page
           this.pagination.total = res.data.paginate.total
-          if(this.pagination.total < this.pagination.pageNum) {
-            this.pagination.pageNum = this.pagination.total
-            this.getData()
-          }
         }).catch(() => {
           this.loading = false
         })

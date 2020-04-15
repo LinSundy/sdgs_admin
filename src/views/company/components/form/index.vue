@@ -56,6 +56,9 @@
       <el-form-item label="近况" :label-width="formLabelWidth">
         <el-input type="textarea" :autosize="true" v-model="form.recent_situation"></el-input>
       </el-form-item>
+      <el-form-item label="资质" :label-width="formLabelWidth">
+        <el-input type="textarea" :autosize="true" v-model="form.credentials"></el-input>
+      </el-form-item>
       <el-form-item label="合作项目" :label-width="formLabelWidth">
         <el-button class="add_item" size="small" type="primary" @click="showRecordForm">添加合作项目</el-button>
         <el-table
@@ -169,7 +172,8 @@
           url: this.company_obj.url || '', // 公司网址
           level: this.company_obj.level || '', // 评级
           recent_situation: this.company_obj.recent_situation || '', // 近况
-          records: this.company_obj.records || [] // 合作项目
+          records: this.company_obj.records|| [], // 合作项目
+          credentials: this.company_obj.credentials || ''
         },
         formLabelWidth: '100px',
         obj: null // 合作记录的弹出窗口
