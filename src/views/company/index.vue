@@ -176,7 +176,7 @@
             console.log(that.format_value(cell['联系方式']), '妞')
             const _data = {
               name: that.format_value(cell['单位名称']),
-              industry_type: that.format_value(cell['行业类别']),
+              industry_type: cell['行业类别'] || 8,
               info: that.format_value(cell['单位简介']),
               register_capital: that.format_value(cell['注册资本']),
               records: that.format_value(cell['已合作项目']),
