@@ -37,11 +37,11 @@ module.exports = {
       errors: true
     },
     proxy: {
-      '/dev-api': {
-        target: 'http://localhost:5000/dev-api',
+      '/sdgs-api': {
+        target: 'http://localhost:5000/sdgs-api',
         changeOrigin: true,
         pathRewrite: {
-          '^/dev-api': '/'
+          '^/sdgs-api': '/'
         }
       }
     }
