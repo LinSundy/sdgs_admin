@@ -22,7 +22,7 @@
           align="right">
           <template slot="header">
             <div class="search-container">
-              <input v-model="search"
+              <input v-model="params.search_value"
                      class="search"
                      @keydown.enter="searchHandle"
                      type="text" placeholder="输入公司名称模糊搜索">
@@ -58,10 +58,10 @@
     <el-pagination
       @current-change="page_handle"
       class="paginate"
-      :page-size="pagination.pageSize"
+      :page-size="params.pageSize"
       background
       layout="prev, pager, next"
-      :total="pagination.total">
+      :total="params.total">
     </el-pagination>
     <CompanyForm
       :company_obj="company_obj"
@@ -101,22 +101,22 @@
         companyList: [],
         parse_loading: null,
         companies: null,
-        search: '',
-        company_obj: null,
-        pagination: {
-          pageSize: 5,
+        params: {
+          search_value: '',
+          pageSize: 20,
           pageNum: 1,
           total: 0
-        }
+        },
+        company_obj: null
       }
     },
     methods: {
       page_handle(pageNum) {
-        this.pagination.pageNum = pageNum
+        this.params.pageNum = pageNum
         this.getData()
       },
       searchHandle() {
-        this.pagination.pageNum = 1
+        this.params.pageNum = 1
         this.getData()
       },
       addCompanySubmitHandle(val) {
@@ -138,7 +138,6 @@
       handleEdit(index, row) {
         this.companyFormVisible = true
         this.company_obj = row
-        console.log(index, row)
       },
       handleDelete(index, row) {
         row.deleteVisible = true
@@ -173,7 +172,6 @@
           const wk_sheet = wb.Sheets[wb.SheetNames[0]]
           const sheet_json = XLSX.utils.sheet_to_json(wk_sheet)
           sheet_json.forEach(cell => {
-            console.log(that.format_value(cell['联系方式']), '妞')
             const _data = {
               name: that.format_value(cell['单位名称']),
               industry_type: cell['行业类别'] || 8,
@@ -202,11 +200,11 @@
       },
       getData() {
         this.loading = true
-        api.getCompanyList(this.pagination, {data: {search_value: this.search}}).then(res => {
+        api.getCompanyList(this.pagination, {data: this.params}).then(res => {
           this.loading = false
           this.companies = res.data.companies
-          this.pagination.pageNum = res.data.paginate.page
-          this.pagination.total = res.data.paginate.total
+          this.params.pageNum = res.data.paginate.page
+          this.params.total = res.data.paginate.total
         }).catch(() => {
           this.loading = false
         })
